@@ -1,50 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>	
-	<title>index</title>
+	<title>jquery-backgrounder v1.0</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 	<style>
-		html, body {
+		html {
 			background-color: #000000;
+		}
+		body {
 			color:#efefef;
 			font-size:12px;
 			font-family: "Helvetica", sans-serif;
 		}
-		body {
-			min-width:800px;
-			min-height:600px;
-		}
-		
-		div#overlay
-		{
-			background: url('img/black_dots.png');
-			left:0px;
-			top:0px;
-			width:100%;
-			height:100%;
-			position:absolute;
-			z-index:1;
-		}
-		
-		div#welcome
-		{
-			background-color:hsla(0, 0%, 0%, .8);
-			height:60px;
-			
-/*			position:absolute;
-			z-index:2;
-			top:100px;left:0px;right:0px;
-*/			
-			
-			padding:10px;
-			border: 1px solid #222;
-					-moz-box-shadow: 2px 2px 20px #222;
-			 -webkit-box-shadow: 2px 2px 20px #222;
-							 box-shadow: 2px 2px 20px #222;
-		}
 	</style>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-	<script src="js/jquery.backgrounder.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.backgrounder.min.js" type="text/javascript" charset="utf-8"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function()
@@ -55,11 +25,34 @@
 				"http://farm1.static.flickr.com/147/333004440_f3889a07dc_z.jpg?zz=1"
 			];
 			
-			$.backgrounder(images,{displayTime:5000,transitionTime:1500});
+			$.backgrounder( images, {
+				displayTime:5000,			// the time in ms how long an image is displayed. Default is 5000.
+				transitionTime:1500,	// the duration in ms for a transition. Default is 1600.
+				centeredX: true,			// Should the image be centered on the X axis? Default to true.
+		    centeredY: true,			// Should the image be centered on the Y axis? Default is true.
+				zIndex: -666					// The css z-index property of the photos. Default is -666.
+			});
 		});
 	</script>
 </head>
 <body>
-	<div id="overlay"></div>
+	<div id="overlay" style="background: url('img/black_dots.png'); left:0px; top:0px; width:100%; height:100%; position:absolute; z-index:-1;"></div>
+	<div id="welcome" style="background-color:hsla(0, 0%, 0%, .6);padding:10px;margin-top: 50px;-moz-box-shadow: 2px 2px 20px #222;-webkit-box-shadow: 2px 2px 20px #222;box-shadow: 2px 2px 20px #222;">
+		<h1 id="jquery_backgrounder_plugin">jquery-backgrounder plugin</h1>
+		<p><em>by Nico Di Rocco</em></p>
+		<h2 id="information">Information</h2>
+		<p>A simple jquery plugin based on Scott Robin&#8217;s jQuery Backstretch plugin.
+		Create a window filling slideshow in the background with multiple images.
+		Resizes images and maintains aspect ratio</p>
+		<p><em>Just one line of code</em></p>
+		<p>Download the code from <a href="https://github.com/nrocco/jquery-backgrounder">github</a></p>
+		<h2 id="usage">Usage</h2>
+		<p><code>$.backgrounder([
+		    "http://farm1.static.flickr.com/133/333784956_56749ca56c_b.jpg",
+		    "http://farm1.static.flickr.com/141/333785078_72166a0c09_z.jpg?zz=1",
+		    "http://farm1.static.flickr.com/147/333004440_f3889a07dc_z.jpg?zz=1"
+		]);</code></p>
+		</div>
+	</div>
 </body>
 </html>

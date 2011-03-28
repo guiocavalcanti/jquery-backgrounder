@@ -1,30 +1,44 @@
+/**
+ * (c) 2011 Casadirocco.nl
+ * 
+ * Version: v1.0
+ * Author: Nico Di Rocco
+ * 
+ * This plugin is based on the jQuery Backstretch plugin by Scott Robin
+ * http://srobbin.com/blog/jquery-plugins/jquery-backstretch/
+ * See code from github here: https://github.com/srobbin/jquery-backstretch
+ * 
+ * 
+ * 
+ **/
+
 $.backgrounder = function( images, options )
 {	
 	//Default settings
 	var settings = {
 		transitionTime: 1600,						// Amount of time to fade in/out the images
-		displayTime: 5000,
-		centeredX: true,					// Should we center the image on the X axis?
-    centeredY: true					// Should we center the image on the Y axis?
+		displayTime: 		5000,
+		centeredX: 			true,					// Should we center the image on the X axis?
+    centeredY: 			true,					// Should we center the image on the Y axis?
+		zIndex: 				-666
 	};	
 
 
 	//Combine options with default settings if it's needed
 	if( options && typeof options == "object" ) 
-		var settings = $.extend(settings, options);
+		settings = $.extend(settings, options);
 
 
 	//Create container and add to the body
-	var container = $("<div />").attr("id", "backgrounder").css({left: 0, top: 0, overflow: "hidden", zIndex: -9999});
+	var container = $("<div />").attr("id", "backgrounder").css({left: 0, top: 0, overflow: "hidden",zIndex:settings.zIndex});
 	
 	$('body').prepend(container).css({overflow:"hidden"});
 
-	var rootElement = $(window); //("onorientationchange" in window) ? $(document) : $(window);
-	
 	//Load all the images and add to container
+	var imgElement;
 	for( var i = images.length; i--; )
 	{
-	  var imgElement = $("<img />").css({display:"none",position:"absolute", zIndex: -9990}).attr("src",images[i]);
+	  imgElement = $("<img />").css({display:"none",position:"absolute",zIndex:settings.zIndex}).attr("src",images[i]);
 		container.append(imgElement);
 	}
 	
@@ -46,39 +60,49 @@ $.backgrounder = function( images, options )
 	setInterval(function()
 	{
 		var currImg = $(".current", container);
-		var nextImg = currImg.next().length ? currImg.next() : container.find('img:first-child');
-
-		//currImg.toggleClass("current").fadeOut(settings.transitionTime);
-		//nextImg.toggleClass("current").delay(settings.transitionTime/4).fadeIn(settings.transitionTime);
-		nextImg.toggleClass("current").fadeIn(settings.transitionTime,function()
+		
+		if( !currImg.next().length )
+			var startAtBeginning = true;
+		
+		if( startAtBeginning )
 		{
-			currImg.toggleClass("current").css({display:"none"});
-		});
+			container.find('img:first-child').addClass("current").css({display:'block'});
+			currImg.removeClass("current").fadeOut(settings.transitionTime);
+		}
+		else
+		{
+			currImg.next().addClass("current").fadeIn(settings.transitionTime,function(){
+				currImg.removeClass("current").css({display:"none"});
+			});
+		}
 	}, settings.displayTime);
-	
-	
+
+
 	
 	function resizer()
-	{
-		
+	{		
+		var imgRatio, bgCSS, bgWidth, bgHeight;
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+
 		$("img", container).each(function()
 		{
-			var imgRatio = $(this).width() / $(this).height();
+			imgRatio = $(this).width() / $(this).height();
 			
-			var bgCSS = {left: 0, top: 0}
-			var bgWidth = rootElement.width();
-			var bgHeight = bgWidth / imgRatio;
+			bgCSS = {left: 0, top: 0}
+			bgWidth = windowWidth;
+			bgHeight = bgWidth / imgRatio;
 
-			if( bgHeight >= rootElement.height() )
+			if( bgHeight >= windowHeight )
 			{
-				bgOffset = (bgHeight - rootElement.height()) /2;
+				bgOffset = (bgHeight - windowHeight) /2;
 				if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
 			}
 			else
 			{
-				bgHeight = rootElement.height();
+				bgHeight = windowHeight;
 				bgWidth = bgHeight * imgRatio;
-				bgOffset = (bgWidth - rootElement.width()) / 2;
+				bgOffset = (bgWidth - windowWidth) / 2;
 				if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
 			}
 
