@@ -3,21 +3,32 @@ jquery-backgrounder plugin
 
 *by Nico Di Rocco*
 
-Information
------------
+### Information
+
 A simple jquery plugin based on Scott Robin's jQuery Backstretch plugin.
 Create a window filling slideshow in the background with multiple images.
 Resizes images and maintains aspect ratio
 
 *Just one line of code*
 
-Download the code from [github](https://github.com/nrocco/jquery-backgrounder)
+Download the code from [github][]
+
+Check the [example][] here
 
 
-Usage
------
-`$.backgrounder([
-	"http://farm1.static.flickr.com/133/333784956_56749ca56c_b.jpg",
-	"http://farm1.static.flickr.com/141/333785078_72166a0c09_z.jpg?zz=1",
-	"http://farm1.static.flickr.com/147/333004440_f3889a07dc_z.jpg?zz=1"
-]);`
+### Usage
+
+	$.backgrounder([
+		"http://farm1.static.flickr.com/133/333784956_56749ca56c_b.jpg",
+		"http://farm1.static.flickr.com/141/333785078_72166a0c09_z.jpg?zz=1",
+		"http://farm1.static.flickr.com/147/333004440_f3889a07dc_z.jpg?zz=1"
+	]);
+
+
+
+
+[github]:	https://github.com/nrocco/jquery-backgrounder
+			"Github project source"
+
+[example]:	http://content.casadirocco.nl/projects/jquery-backgrounder/example.html
+			"The jquery-backgrounder plugin in action."
