@@ -18,8 +18,8 @@ A simple jquery plugin based on Nico Di Rocco's jQuery jquery.backgrounder plugi
 ```
 
 ```js
-  var cssClasses = ["image-1", "image-2"]
-	$('.container').backgrounder(cssClasses);
+var cssClasses = ["image-1", "image-2"]
+$('.container').backgrounder(cssClasses);
 ```
 
 ### Copyright
