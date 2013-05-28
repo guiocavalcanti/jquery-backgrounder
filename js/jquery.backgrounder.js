@@ -1,72 +1,55 @@
 /**
- * (c) 2011 Casadirocco.nl
- * 
- * Version: v1.0
- * Author: Nico Di Rocco
- * 
- * This plugin is based on the jQuery Backstretch plugin by Scott Robin
- * http://srobbin.com/blog/jquery-plugins/jquery-backstretch/
- * See code from github here: https://github.com/srobbin/jquery-backstretch
- * 
- * 
- * 
+ * (c) 2013 Guilherme Cavalcnti
+ *
+ * Version: v1.1
+ * Author: Guilherme Cavalcanti
+ *
+ * This plugin is based on the jquery-backgrounder plugin by Nico Di Rocco
+ * See code from github here: https://github.com/nrocco/jquery-backgrounder
  **/
 
-$.backgrounder = function( images, options )
-{	
+$.fn.backgrounder = function( images, options )
+{
 	//Default settings
 	var settings = {
 		transitionTime: 1600,						// Amount of time to fade in/out the images
 		displayTime: 		5000,
-		centeredX: 			true,					// Should we center the image on the X axis?
-    centeredY: 			true,					// Should we center the image on the Y axis?
 		zIndex: 				-666
-	};	
+	};
 
-
-	//Combine options with default settings if it's needed
-	if( options && typeof options == "object" ) 
+	// Combine options with default settings if it's needed
+	if(options && typeof options == "object")
 		settings = $.extend(settings, options);
 
+	// Create container and add to the body
+	var container = $("<div/>").attr("id", "backgrounder").css({left: 0, top: 0, overflow: "hidden", zIndex:settings.zIndex});
+  var $this = $(this);
 
-	//Create container and add to the body
-	var container = $("<div />").attr("id", "backgrounder").css({left: 0, top: 0, overflow: "hidden",zIndex:settings.zIndex});
-	
-	$('body').prepend(container).css({overflow:"hidden"});
+	$(this).prepend(container).css({overflow:"hidden"});
 
-	//Load all the images and add to container
+	// Load all the images and add to container
 	var imgElement;
 	for( var i = images.length; i--; )
 	{
-	  imgElement = $("<img />").css({display:"none",position:"absolute",zIndex:settings.zIndex}).attr("src",images[i]);
+    var url = "url(" + images[i] + ")";
+	  imgElement = $("<div>").css({display:"none",position:"absolute",zIndex:settings.zIndex, width: $this.width(), height: $this.height()}).addClass(images[i]).addClass("image");
 		container.append(imgElement);
 	}
-	
-	
-	//Disable context menu on all images
-	$('img', container).bind("contextmenu",function() { return false; });
-	$('img', container).bind("mousedown",function() { return false; });
-	
-	
-	//Grab the first image in the container and fade in
-	$("img:first-child", container).toggleClass("current").fadeIn(settings.transitionTime);
-	
-	
-	resizer();
-	$(window).resize(resizer);
-	$(window).load(resizer);
-	
-	//Slideshow enabled
+
+	// Grab the first image in the container and fade in
+	$("div:first-child", container).toggleClass("current").fadeIn(settings.transitionTime);
+
+	// Slideshow enabled
 	setInterval(function()
 	{
 		var currImg = $(".current", container);
-		
+
 		if( !currImg.next().length )
 			var startAtBeginning = true;
-		
+
 		if( startAtBeginning )
 		{
-			container.find('img:first-child').addClass("current").css({display:'block'});
+			container.find('div:first-child').addClass("current").css({display:'block'});
 			currImg.removeClass("current").fadeOut(settings.transitionTime);
 		}
 		else
@@ -76,37 +59,4 @@ $.backgrounder = function( images, options )
 			});
 		}
 	}, settings.displayTime);
-
-
-	
-	function resizer()
-	{		
-		var imgRatio, bgCSS, bgWidth, bgHeight;
-		var windowWidth = $(window).width();
-		var windowHeight = $(window).height();
-
-		$("img", container).each(function()
-		{
-			imgRatio = $(this).width() / $(this).height();
-			
-			bgCSS = {left: 0, top: 0}
-			bgWidth = windowWidth;
-			bgHeight = bgWidth / imgRatio;
-
-			if( bgHeight >= windowHeight )
-			{
-				bgOffset = (bgHeight - windowHeight) /2;
-				if(settings.centeredY) $.extend(bgCSS, {top: "-" + bgOffset + "px"});
-			}
-			else
-			{
-				bgHeight = windowHeight;
-				bgWidth = bgHeight * imgRatio;
-				bgOffset = (bgWidth - windowWidth) / 2;
-				if(settings.centeredX) $.extend(bgCSS, {left: "-" + bgOffset + "px"});
-			}
-
-			$(this).width( bgWidth ).height( bgHeight ).css(bgCSS);
-		});
-	}
 }
